@@ -91,6 +91,17 @@ $app->group("/crawler", function() use($app) {
 
 $app->group("/api", function() use($app) {
 
+    $app->get('/', function () {
+
+        $levels = Waterlevel::all();
+        $data = $levels->toArray();
+
+        header("Content-Type: application/json");
+        header('Access-Control-Allow-Origin: *');
+        echo json_encode($data);
+        exit;
+    });
+
     $app->get('/waterlevel/:state', function ($state) {
 
         $state = strtolower($state);
@@ -108,6 +119,8 @@ $app->group("/api", function() use($app) {
         echo json_encode($data);
         exit;
     });
+
+
 
 });
 
