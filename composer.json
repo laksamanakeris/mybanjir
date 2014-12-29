@@ -2,7 +2,8 @@
     "require": {
         "slim/slim": "2.*",
         "illuminate/database": "*",
-        "sunra/php-simple-html-dom-parser": "v1.5.0"
+        "sunra/php-simple-html-dom-parser": "v1.5.0",
+        "cron/cron": "1.0.*@dev"
     },
     "autoload": {
         "files": [ "app/config.php" ],

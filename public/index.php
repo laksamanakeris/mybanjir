@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Kuala_Lumpur'); 
 
 require __DIR__.'/../vendor/autoload.php';
 
@@ -10,16 +11,34 @@ $app->get('/', function() {
     echo "MyBanjir";
 });
 
+
 $app->group("/crawler", function() use($app) {
 
-    $app->get('/waterlevel/:state', function ($state) {
+    $app->get('/waterlevel/:state(/:page)', function ($state, $page = '') use ($app){
+
+    	$page_array = array('0','1','16', '31');
 
         $url = 'http://infobanjir.water.gov.my/waterlevel_page.cfm?state='.$state;
+
+        //$page = $app->request->get('page');
+        
+        if($page != ""){
+        	$page = (int)$page;
+        	$page = $page - 1;
+        	$url = $url."&rows=".$page_array[$page]."&rowcheck=1";
+        }
+
 
         try {
             $html = HtmlDomParser::file_get_html( $url );
         }
         catch(Exception $e) {
+
+        	header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+			header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+			header("Cache-Control: post-check=0, pre-check=0", false);
+			header("Pragma: no-cache");
             header("Content-Type: application/json");
 
             $data = array('Message' => 'An error has occured');
@@ -82,6 +101,11 @@ $app->group("/crawler", function() use($app) {
             }
         }
 
+        header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+		header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
         header("Content-Type: application/json");
         echo json_encode($data);
         exit;
@@ -96,6 +120,11 @@ $app->group("/api", function() use($app) {
         $levels = Waterlevel::all();
         $data = $levels->toArray();
 
+        header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+		header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
         header("Content-Type: application/json");
         header('Access-Control-Allow-Origin: *');
         echo json_encode($data);
@@ -114,6 +143,11 @@ $app->group("/api", function() use($app) {
             $data = $levels->toArray();
         }
 
+        header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+		header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
         header("Content-Type: application/json");
         header('Access-Control-Allow-Origin: *');
         echo json_encode($data);
